@@ -2,7 +2,7 @@
  *      Author: alexanderb
  */
  
-#include "util.h"
+#include "Util.h"
 
 void Util::DisplayImage(Mat& img) {
 	// Create UI

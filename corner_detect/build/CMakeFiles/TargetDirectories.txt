@@ -1,0 +1,3 @@
+/home/ground/down_camera/corner_detect/build/CMakeFiles/edit_cache.dir
+/home/ground/down_camera/corner_detect/build/CMakeFiles/rebuild_cache.dir
+/home/ground/down_camera/corner_detect/build/CMakeFiles/Ex2.dir

@@ -2,7 +2,7 @@
  *      Author: alexanderb
  */
 
-#include "harris.h"
+#include "Harris.h"
 
 Harris::Harris(Mat img, float k, int filterRange, bool gauss) {
     // (1) Convert to greyscalescale image

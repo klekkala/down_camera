@@ -8,8 +8,8 @@ find_package( OpenCV REQUIRED )
 
 #
 add_executable( Ex2 
-	util.cpp
-	harris.cpp
+	Util.cpp
+	Harris.cpp
 
 	ex2.cpp
 )
