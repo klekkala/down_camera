@@ -293,3 +293,37 @@ Mat Harris::gaussFilter(Mat& img, int range) {
 
     return gauss;
 }
+
+
+Mat Harris::MarkInImage(Mat& img, vector<pointData> points, int radius) {
+    Mat retImg;
+    img.copyTo(retImg);
+
+    for(vector<pointData>::iterator it = points.begin(); it != points.end(); ++it) {
+        Point center = (*it).point;
+
+        // down
+        for(int r=-radius; r<radius; r++) {
+            retImg.at<Vec3b>(Point(center.y+r,center.x+radius)) = Vec3b(0, 0, 255);
+        }
+
+        // up
+        for(int r=-radius; r<radius; r++) {
+            retImg.at<Vec3b>(Point(center.y+r,center.x-radius)) = Vec3b(0, 0, 255);
+        }
+
+        // left
+        for(int c=-radius; c<radius; c++) {
+            retImg.at<Vec3b>(Point(center.y-radius,center.x+c)) = Vec3b(0, 0, 255);
+        }
+
+        // right
+        for(int c=-radius; c<radius; c++) {
+            retImg.at<Vec3b>(Point(center.y+radius,center.x+c)) = Vec3b(0, 0, 255);
+        }
+
+        retImg.at<Vec3b>(Point(center.y,center.x)) = Vec3b(0, 255, 0);
+    }
+
+    return retImg;
+}

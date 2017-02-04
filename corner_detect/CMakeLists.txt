@@ -7,19 +7,18 @@ MESSAGE( STATUS "------------------" ${OpenCV_INCLUDE_DIRS} )
 find_package( OpenCV REQUIRED )
 
 #
-add_executable( Ex2 
-	Util.cpp
+add_executable( Harris
 	Harris.cpp
 
-	ex2.cpp
+	main.cpp
 )
 
 
-target_include_directories( Ex2
+target_include_directories( Harris
 	PRIVATE 	.
 			${OpenCV_INCLUDE_DIRS}
 )
 
-target_link_libraries( Ex2 
+target_link_libraries( Harris 
 	${OpenCV_LIBS} 
 )
