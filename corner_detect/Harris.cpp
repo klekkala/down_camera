@@ -8,7 +8,7 @@ Harris::Harris(Mat img, float k, int filterRange) {
     // (2) Compute Derivatives
     Derivatives derivatives = computeDerivatives(greyscaleImg);
 
-    // (3) Median Filtering
+    // (3) Gaussian Filtering
     Derivatives mDerivatives;
     mDerivatives = applyGaussToDerivatives(derivatives, filterRange);
 
@@ -20,7 +20,7 @@ Harris::Harris(Mat img, float k, int filterRange) {
 //-----------------------------------------------------------------------------------------------
 vector<pointData> Harris::getMaximaPoints(float percentage, int filterRange, int suppressionRadius) {
     // Declare a max suppression matrix
-    Mat maximaSuppressionMat(m_harrisResponses.rows, m_harrisResponses.cols, CV_32F, Scalar::all(0));
+    Mat maximaSuppressionMat(m_harrisResponses.rows, m_harrisResponses.cols, CV_32FC1, Scalar::all(0));
 
     // Create a vector of all Points
     std::vector<pointData> points;
@@ -106,12 +106,12 @@ Derivatives Harris::computeDerivatives(Mat& greyscaleImg) {
     Mat Ix, Iy;
     Mat abs_Ix, abs_Iy;
 
-    int scale = 1, delta = 0, ddepth = CV_32F;
+    int scale = 1, delta = 0, ddepth = CV_32FC1;
     Sobel(greyscaleImg, Ix, ddepth, 1, 0, 3, scale, delta);
-    convertScaleAbs(Ix, abs_Ix );
+    //convertScaleAbs(Ix, abs_Ix );
 
     Sobel(greyscaleImg, Iy, ddepth, 0, 1, 3, scale, delta);
-    convertScaleAbs(Iy, abs_Iy );
+    //convertScaleAbs(Iy, abs_Iy );
 
     Derivatives d;
     d.Ix = abs_Ix;
@@ -123,7 +123,7 @@ Derivatives Harris::computeDerivatives(Mat& greyscaleImg) {
 
 //-----------------------------------------------------------------------------------------------
 Mat Harris::computeHarrisResponses(float k, Derivatives& d) {
-    Mat M(d.Iy.rows, d.Ix.cols, CV_32F);
+    Mat M(d.Iy.rows, d.Ix.cols, CV_32FC1);
 
     for(int r=0; r<d.Iy.rows; r++) {  
         for(int c=0; c<d.Iy.cols; c++) {
@@ -148,7 +148,7 @@ Mat Harris::computeHarrisResponses(float k, Derivatives& d) {
 
 Mat Harris::gaussFilter(Mat& img, int range) {
     // Helper Mats for better time complexity
-    Mat gaussHelperV(img.rows-range*2, img.cols-range*2, CV_32F);
+    Mat gaussHelperV(img.rows-range*2, img.cols-range*2, CV_32FC1);
     for(int r=range; r<img.rows-range; r++) {
         for(int c=range; c<img.cols-range; c++) {
             float res = 0;
@@ -163,7 +163,7 @@ Mat Harris::gaussFilter(Mat& img, int range) {
         }
     }
 
-    Mat gauss(img.rows-range*2, img.cols-range*2, CV_32F);
+    Mat gauss(img.rows-range*2, img.cols-range*2, CV_32FC1);
     for(int r=range; r<img.rows-range; r++) {
         for(int c=range; c<img.cols-range; c++) {
             float res = 0;
