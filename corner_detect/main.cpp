@@ -17,12 +17,11 @@ float k = 0.25;
 int boxFilterSize = 6;
 
 int markDimension = 5;
-bool gauss = true;
 Mat m_img;
 
 void doHarris() {
     // compute harris
-    Harris harris(m_img, k, boxFilterSize, gauss);
+    Harris harris(m_img, k, boxFilterSize);
 
     // get vector of points wanted
     vector<pointData> resPts = harris.getMaximaPoints(0.000519, boxFilterSize, 10);
@@ -41,24 +40,13 @@ int main(int argc, char** argv) {
     if (argc == 1) {
         cout << "No image provided! Usage: ./Ex1 [path to image]" << endl << "Using default image: haus.jpg" << endl;
 
-        img = imread("haus.jpg");
     } else {
         img = imread(argv[1]);
     }
 
-    // if(img.rows > 100 || img.cols > 100) {
-    //     int newrows = 600;
-    //     int newcols = img.cols * newrows / img.rows;
-
-    //     resize(img, img, Size(newcols, newrows), 0, 0, INTER_CUBIC);
-    // }
     img.copyTo(m_img);
 
-    // create UI and show the image
-    //namedWindow("HarrisCornerDetector", 1);
-
     doHarris();
-    //imshow("HarrisCornerDetector", img);
     waitKey(0);
 
     return 0;

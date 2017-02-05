@@ -27,7 +27,7 @@ struct Derivatives {
 
 class Harris {
 public:
-    Harris(Mat img, float k, int filterRange, bool gauss);
+    Harris(Mat img, float k, int filterRange);
 	vector<pointData> getMaximaPoints(float percentage, int filterRange, int suppressionRadius);
 	static Mat MarkInImage(Mat& img, vector<pointData> points, int radius);
 
