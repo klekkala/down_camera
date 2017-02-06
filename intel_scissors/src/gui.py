@@ -31,7 +31,7 @@ class ImageWin(QtGui.QWidget):
             self.image_path = QtGui.QFileDialog.getOpenFileName(self, '', '', '(*.bmp *.jpg *.png)')
         self.image = QtGui.QPixmap(self.image_path)
         self.cv2_image = cv2.imread(str(self.image_path))
-        gray_image = cv2.cvtColor(cv2_image, cv2.COLOR_BGR2GRAY)
+        self.gray_image = cv2.cvtColor(self.cv2_image, cv2.COLOR_BGR2GRAY)
         self.lw = Livewire(self.gray_image)
         self.w, self.h = self.image.width(), self.image.height()
         

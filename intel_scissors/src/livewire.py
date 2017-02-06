@@ -23,13 +23,13 @@ class Livewire():
         # The values in cost matrix ranges from 0~1
         self.gradient = np.empty([self.x_lim, self.x_lim], dtype=object)
         
-        self.flag = self._get_grad(image, gradient)
+        self.flag = self._get_grad(self.image, self.gradient)
         self.n_pixs = self.x_lim * self.y_lim
         self.n_processed = 0
     
 
     def _get_neighbors(self, p):
-        """
+        """s
         Return 8 neighbors around the pixel p
         """
         x, y = p
@@ -39,49 +39,53 @@ class Livewire():
         y1 = self.y_lim if y == self.y_lim - 1 else y + 2
         
         return [(x, y) for x in xrange(x0, x1) for y in xrange(y0, y1) if (x, y) != p]
-    
-    @classmethod
-    def _get_grad(cls, image, gradient):
+
+    def _get_grad(self, image, gradient):
         """
         Return the gradient magnitude of the image using heuristics
         """
-        neighbors = self._get_neighbors(p)
         height, width = image.shape
-        for value in image[0:height, 0:width]
+        diagonal=0
+        for i in range(0, height):
+            for j in range(0, width):
+                gradient[i,j] = {}
+                maxval = 0
+                neighbors = self._get_neighbors((i,j))
+                print(type(neighbors))
+                print(neighbors[1])
+                for bors in neighbors:
+                    #horizontal and vertical edges
+                    diaganol = bors[0] == i or bors[1] == j
+
+                    if diagonal:
+                        gradient[i,j][bors] = math.fabs(image(i+1, j) - image(i, j-1))/math.sqrt(2)
+                        maxval = max(maxval, gradient[i,j][bors])
+
+                    else:
+                        gradient[i,j][bors] = math.fabs(image(i, j-1) + image(i+1, j-1) - image(i, j+1) - image(i+1,j+1))/4
+                        maxval = max(maxval, gradient[i,j][bors])
+                
+                for bors in neighbors:
+
+                    if diagonal:
+                        gradient[i,j][bors] = (math.sqrt(maxval) - gradient[i,j][bors])*1
+                    else:
+                        gradient[i,j][bors] = (math.sqrt(maxval) - gradient[i,j][bors])*1
+        
+        
+
         return 1
 
     def _local_cost(self, p, q):
         """
         Assumption: p & q are neighbors
         """
-        diaganol = q[0] == p[0] or q[1] == p[1]
         
         # dlink is the cost of the link
         # dmax is the maximum link cost among all the links in the picture
         # clink is the final cost function
 
-        #horizontal and vertical edges
-        dlinkn = mod(self.img(i+1, j) - self.img(i, j-1))/sqrt(2)
-        dlink = mod(self.img(i+1, j) - self.img(i, j-1))/sqrt(2)
-        dlinkright = mod(self.img(i+1, j) - self.img(i, j-1))/sqrt(2)
-        dlinkdown = mod(self.img(i+1, j) - self.img(i, j-1))/sqrt(2)
-
-        #diagonal edges
-        dlink = mod(self.img(i, j-1) + self.img(i+1, j-1) - self.img(i, j+1) - self.img(i+1,j+1))/4
-        dlink = mod(self.img(i, j-1) + self.img(i+1, j-1) - self.img(i, j+1) - self.img(i+1,j+1))/4
-        dlink = mod(self.img(i, j-1) + self.img(i+1, j-1) - self.img(i, j+1) - self.img(i+1,j+1))/4
-        dlink = mod(self.img(i, j-1) + self.img(i+1, j-1) - self.img(i, j+1) - self.img(i+1,j+1))/4
-        
-        dmax = max()
-
-
-        if np.isnan(c2):
-            c2 = 0.0
-        
-        w0, w1, w2 = self.weight
-        cost_pq = w0*c0 + w1*c1 + w2*c2
-        
-        return cost_pq * cost_pq
+        return self.gradient[p[0], p[1]][q]
 
     def get_path_matrix(self, seed):
         """
