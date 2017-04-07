@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
     Harris harris(img, k, boxFilterSize);
 
     // get vector of points wanted
-    vector<pointData> resPts = harris.getMaximaPoints(0.000219, boxFilterSize, 10);
+    vector<pointData> resPts = harris.getMaximaPoints(0.000619, boxFilterSize, 3);
     // cout << resPts.size() << " Points" << endl;
 
     Mat _img = Harris::MarkInImage(img, resPts, markDimension);
